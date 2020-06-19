@@ -16,7 +16,16 @@
                     <canvas id="canvasInput" width="400" height="400"></canvas>
                 </td>
                 <td>
-                    <canvas id="canvasOutput" width="400" height="400"></canvas>
+                    <canvas id="outputHSV" width="400" height="400"></canvas>
+                </td>
+                <td>
+                    <canvas id="outputMask" width="400" height="400"></canvas>
+                </td>
+                <td>
+                    <canvas id="outputBound" width="400" height="400"></canvas>
+                </td>
+                <td>
+                    <canvas id="outputCropped" width="400" height="400"></canvas>
                 </td>
             </tr>
             <tr>
@@ -25,13 +34,22 @@
                     <input id="fileInput" type="file" name="file" accept="image/*">
                 </td>
                 <td>
-                    canvasOutput
+                    outputHSV
+                </td>
+                <td>
+                    outputMask
+                </td>
+                <td>
+                    outputBound
+                </td>
+                <td>
+                    outputCropped
                 </td>
             </tr>
         </tbody>
     </table>
 </div>
 <script async src="opencv.js" onload="onOpenCvReady();" type="text/javascript"></script>
-<script src="test.js"  type="text/javascript"></script>
+<script src="imgproc.js"  type="text/javascript"></script>
 </body>
 </html>
