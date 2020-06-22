@@ -5,9 +5,8 @@ inputElement.addEventListener('change', (e) => {
 }, false);
 
 //contour class to ease sorting
-function SortableContour(perimeterSize,areaSize,contour)
+function SortableContour(areaSize,contour)
   {
-    this.perimeterSize = perimeterSize;
     this.areaSize = areaSize;
     this.contour = contour;
   }
@@ -51,27 +50,65 @@ imgElement.onload = function() {
       let hierarchy = new cv.Mat();
       //Find the contours of the image
       cv.findContours(mask,contours,hierarchy,cv.RETR_TREE,cv.CHAIN_APPROX_SIMPLE);
-      //Sort contours from largest to smallest
+      // Sort contours from largest to smallest
       ArrCnts = [];
       for(let i = 0; i < contours.size(); ++i)
         {
           let cnt = contours.get(i);
           let area = cv.contourArea(cnt, false);
-          let perim = cv.arcLength(cnt,false);
 
-          ArrCnts.push(new SortableContour(perim,area,cnt));
+          ArrCnts.push(new SortableContour(area,cnt));
+          
         }
-      //Extract the 4 largest contours
-      //Get the corners of the contour
-      //Reorder corners tl tr br bl
+      //Extract the n largest contours
+      //Extract the contour with 4 corners that is also the largest contour ( so far )
+      ArrCnts.sort(function(item1,item2){return item2.areaSize - item1.areaSize});
+      let biggestCnts = ArrCnts.slice(0,15);
+      let approxCnt = new cv.Mat();
+
+      //Debugging messages
+
+      console.log(ArrCnts.length);
+      console.log(biggestCnts.length);
+      
+      // //Extract corner data from photo
+      // let cornerArray = []
+      // if(boxCnt != null)
+      //   {
+      //     cornerArray.push( new cv.Point(foundContour.data32S[0], foundContour.data32S[1]));
+      //     cornerArray.push( new cv.Point(foundContour.data32S[2], foundContour.data32S[3]));
+      //     cornerArray.push( new cv.Point(foundContour.data32S[4], foundContour.data32S[5]));
+      //     cornerArray.push( new cv.Point(foundContour.data32S[6], foundContour.data32S[7]));
+      //   }
+      // else
+      //   {
+      //     console.log("No box contour found")
+      //     return;
+      //   }
+      // //Reorder corners tl tr br bl
+      // cornerArray.sort(function(a,b){return b.y-a.y});
+      // for(let i = 0 ; i < cornerArray.length ; ++i)
+      //   {
+      //     console.log("This is a corner ("+cornerArray[i].x+","+cornerArray[i].y+")");
+      //   }
       //Do perspective transform
       //Show the images in their respective canvases
       cv.imshow('canvasInput', src);
       cv.imshow('outputHSV',hsv);
       cv.imshow('outputMask',mask);
-      cv.imshow('outputBound',bound);
+      // cv.imshow('outputBound',bound);
+
       //Delete all matrices after used
-      org.delete();src.delete();dst.delete();mask.delete();bound.delete();low.delete();high.delete();contours.delete();hierarchy.delete();
+      org.delete();
+      src.delete();
+      mask.delete();
+      bound.delete();
+      low.delete();
+      high.delete();
+      contours.delete();
+      hierarchy.delete();
+      approxCnt.delete();
+      // boxCnt.delete();
     }
   catch(e)
     {
