@@ -60,24 +60,19 @@ imgElement.onload = function() {
           ArrCnts.push(new SortableContour(area,cnt));
           
         }
+        ArrCnts.sort(function(item1,item2){return item2.areaSize - item1.areaSize});
       //Extract the n largest contours
       //Extract the contour with 4 corners that is also the largest contour ( so far )
-      ArrCnts.sort(function(item1,item2){return item2.areaSize - item1.areaSize});
+      
       let biggestCnts = ArrCnts.slice(0,15);
       let approxCnt = new cv.Mat();
-
-      //Debugging messages
-
-      // console.log(ArrCnts.length);
-      // console.log(biggestCnts.length);
-
-      let approx = new cv.Mat();
+      //Get the largest contour and put it in approxCnt
       for(let j = 0 ; j < biggestCnts.length ; ++j)
         {
           let peri = cv.arcLength(biggestCnts[j].contour,true);
-          cv.approxPolyDP(biggestCnts[j].contour,approx,peri*0.015,true);
+          cv.approxPolyDP(biggestCnts[j].contour,approxCnt,peri*0.015,true);
 
-          if(approx.rows==4)
+          if(approxCnt.rows==4)
             {
               console.log("Appropriate contour has been found !")
               break;
@@ -88,22 +83,20 @@ imgElement.onload = function() {
               return;
             }
         }
-      
-      
-      // //Extract corner data from photo
-      // let cornerArray = []
-      // if(boxCnt != null)
-      //   {
-      //     cornerArray.push( new cv.Point(foundContour.data32S[0], foundContour.data32S[1]));
-      //     cornerArray.push( new cv.Point(foundContour.data32S[2], foundContour.data32S[3]));
-      //     cornerArray.push( new cv.Point(foundContour.data32S[4], foundContour.data32S[5]));
-      //     cornerArray.push( new cv.Point(foundContour.data32S[6], foundContour.data32S[7]));
-      //   }
-      // else
-      //   {
-      //     console.log("No box contour found")
-      //     return;
-      //   }
+      //Get the 4 corners
+        cornerArray = []
+        cornerArray.push(new cv.Point(approxCnt.data32S[0],approxCnt.data32S[1]));
+        cornerArray.push(new cv.Point(approxCnt.data32S[2],approxCnt.data32S[3]));
+        cornerArray.push(new cv.Point(approxCnt.data32S[4],approxCnt.data32S[5]));
+        cornerArray.push(new cv.Point(approxCnt.data32S[6],approxCnt.data32S[7]));
+
+        cornerArray.sort(function(a,b){return a.x-b.x});
+        console.log(cornerArray.length);
+        for(let i = 0 ; i < cornerArray.length ; ++i)
+          {
+              console.log("("+cornerArray[i].x+","+cornerArray[i].y+")");
+          }
+
       // //Reorder corners tl tr br bl
       // cornerArray.sort(function(a,b){return b.y-a.y});
       // for(let i = 0 ; i < cornerArray.length ; ++i)
