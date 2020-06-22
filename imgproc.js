@@ -68,8 +68,27 @@ imgElement.onload = function() {
 
       //Debugging messages
 
-      console.log(ArrCnts.length);
-      console.log(biggestCnts.length);
+      // console.log(ArrCnts.length);
+      // console.log(biggestCnts.length);
+
+      let approx = new cv.Mat();
+      for(let j = 0 ; j < biggestCnts.length ; ++j)
+        {
+          let peri = cv.arcLength(biggestCnts[j].contour,true);
+          cv.approxPolyDP(biggestCnts[j].contour,approx,peri*0.015,true);
+
+          if(approx.rows==4)
+            {
+              console.log("Appropriate contour has been found !")
+              break;
+            }
+          else
+            {
+              console.log("APPROPRIATE CONTOUR NOT FOUND")
+              return;
+            }
+        }
+      
       
       // //Extract corner data from photo
       // let cornerArray = []
