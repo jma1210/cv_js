@@ -5,7 +5,7 @@ inputElement.addEventListener('change', (e) => {
 }, false);
 
 //contour class to ease sorting
-function SortableContours(perimeterSize,areaSize,contour)
+function SortableContour(perimeterSize,areaSize,contour)
   {
     this.perimeterSize = perimeterSize;
     this.areaSize = areaSize;
@@ -52,6 +52,15 @@ imgElement.onload = function() {
       //Find the contours of the image
       cv.findContours(mask,contours,hierarchy,cv.RETR_TREE,cv.CHAIN_APPROX_SIMPLE);
       //Sort contours from largest to smallest
+      ArrCnts = [];
+      for(let i = 0; i < contours.size(); ++i)
+        {
+          let cnt = contours.get(i);
+          let area = cv.contourArea(cnt, false);
+          let perim = cv.arcLength(cnt,false);
+
+          ArrCnts.push(new SortableContour(perim,area,cnt));
+        }
       //Extract the 4 largest contours
       //Get the corners of the contour
       //Reorder corners tl tr br bl
