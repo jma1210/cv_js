@@ -4,17 +4,17 @@ inputElement.addEventListener('change', (e) => {
   imgElement.src = URL.createObjectURL(e.target.files[0]);
 }, false);
 
-export class SortableContour
-  {
-    perimiterSize:number;
-    areaSize:number;
-    contour:any;
+// export class SortableContour
+//   {
+//     perimiterSize:number;
+//     areaSize:number;
+//     contour:any;
 
-    constructor(fields:Partial<SortableContour>)
-      {
-        Object.assign(this,fields);
-      }
-  }
+//     constructor(fields:Partial<SortableContour>)
+//       {
+//         Object.assign(this,fields);
+//       }
+//   }
 
 
 imgElement.onload = function() {
@@ -33,7 +33,7 @@ imgElement.onload = function() {
             newWidth = org.cols * ratio;
             newHeight = org.rows * ratio;
           }
-        //create new size matrix
+        // create new size matrix
         let dsize = new cv.Size(newWidth,newHeight);
       
       let src = new cv.Mat();
@@ -55,7 +55,7 @@ imgElement.onload = function() {
       let contours = new cv.MatVector();
       let hierarchy = new cv.Mat();
       //Find the contours of the image
-      cv.findContours(mask,contours,hierarchy,cv.RETR_TREE,cv.CHAIN_APPROX_SIMPLE);
+      // cv.findContours(mask,contours,hierarchy,cv.RETR_TREE,cv.CHAIN_APPROX_SIMPLE);
       //Sort contours from largest to smallest
       //Extract the 4 largest contours
       //Get the corners of the contour
