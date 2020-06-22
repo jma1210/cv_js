@@ -4,18 +4,13 @@ inputElement.addEventListener('change', (e) => {
   imgElement.src = URL.createObjectURL(e.target.files[0]);
 }, false);
 
-// export class SortableContour
-//   {
-//     perimiterSize:number;
-//     areaSize:number;
-//     contour:any;
-
-//     constructor(fields:Partial<SortableContour>)
-//       {
-//         Object.assign(this,fields);
-//       }
-//   }
-
+//contour class to ease sorting
+function SortableContours(perimeterSize,areaSize,contour)
+  {
+    this.perimeterSize = perimeterSize;
+    this.areaSize = areaSize;
+    this.contour = contour;
+  }
 
 imgElement.onload = function() {
   try
@@ -55,7 +50,7 @@ imgElement.onload = function() {
       let contours = new cv.MatVector();
       let hierarchy = new cv.Mat();
       //Find the contours of the image
-      // cv.findContours(mask,contours,hierarchy,cv.RETR_TREE,cv.CHAIN_APPROX_SIMPLE);
+      cv.findContours(mask,contours,hierarchy,cv.RETR_TREE,cv.CHAIN_APPROX_SIMPLE);
       //Sort contours from largest to smallest
       //Extract the 4 largest contours
       //Get the corners of the contour
@@ -74,6 +69,9 @@ imgElement.onload = function() {
       console.error(e)
     }
 };
+
 function onOpenCvReady() {
     document.getElementById('status').innerHTML = 'OpenCV.js is ready.';
   }
+
+  
