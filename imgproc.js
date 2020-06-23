@@ -37,7 +37,7 @@ imgElement.onload = function() {
 
         let hsv = new cv.Mat();
         let mask = new cv.Mat();
-        let bound = new cv.Mat();
+        let cropped = new cv.Mat();
         cv.cvtColor(src,hsv,cv.COLOR_RGB2HSV,0)
     
       //Filter blue color of given ID image
@@ -110,24 +110,31 @@ imgElement.onload = function() {
       let heightRight = Math.hypot(tl.x-bl.x,tl.y-bl.y);
       let actWidth = (widthBot>widthTop) ? widthBot:widthTop;
       let actHeight = (heightLeft>heightRight) ? heightLeft:heightRight;
+
+      // console.log(widthBot);
+      // console.log(widthTop);
+      // console.log(heightLeft);
+      // console.log(heightRight);
+      // console.log(actWidth);
+      // console.log(actHeight);
       //Do perspective transform
       //Get the matrix of transformation
-      let finalCoords = cv.matFromArray(4,1,cv.CV32FC2,[0,0,actWidth-1,0,actWidth-1,actHeight-1,0,actHeight-1]);
-      let sourceCoords = cv.matFromArray(4,1,cv.CV32FC2,[tl.x,tl.y,tr.x,tr.y,br.x,br.y,bl.x,bl.y]);
-      dsize = cv.Size(actWidth,actHeight);
-      let M = cv.getPerspectiveTransform(sourceCoords,finalCoords);
-
+      let finalCoords = new cv.matFromArray(4,1,cv.CV_32FC2,[0,0,actWidth-1,0,actWidth-1,actHeight-1,0,actHeight-1]);
+      let sourceCoords = new cv.matFromArray(4,1,cv.CV_32FC2,[tl.x,tl.y,tr.x,tr.y,br.x,br.y,bl.x,bl.y]);
+      dsize = new cv.Size(actWidth,actHeight);
+      let Matrix = cv.getPerspectiveTransform(sourceCoords,finalCoords);
+      cv.warpPerspective(src,cropped,Matrix,dsize,cv.INTER_LINEAR,cv.BORDER_CONSTANT,new cv.Scalar())
       //Show the images in their respective canvases
         cv.imshow('canvasInput', src);
         cv.imshow('outputHSV',hsv);
         cv.imshow('outputMask',mask);
-        cv.imshow('outputBound',bound);
+        cv.imshow('outputCropped',cropped);
 
       //Delete all matrices after used
         org.delete();
         src.delete();
         mask.delete();
-        bound.delete();
+        cropped.delete();
         low.delete();
         high.delete();
         contours.delete();
@@ -135,7 +142,7 @@ imgElement.onload = function() {
         approxCnt.delete();
         finalCoords.delete();
         sourceCoords.delete();
-        M.delete();
+        Matrix.delete();
       // boxCnt.delete();
     }
   catch(e)
