@@ -98,30 +98,30 @@ imgElement.onload = function() {
         let bl = sortedDiff[0];
         
 
-        console.log("The corners are: ");
-        console.log("("+tl.x+","+tl.y+")");
-        console.log("("+tr.x+","+tr.y+")");
-        console.log("("+bl.x+","+bl.y+")");
-        console.log("("+br.x+","+br.y+")");
+        // console.log("The corners are: ");
+        // console.log("("+tl.x+","+tl.y+")");
+        // console.log("("+tr.x+","+tr.y+")");
+        // console.log("("+bl.x+","+bl.y+")");
+        // console.log("("+br.x+","+br.y+")");
       //Calculate the width and height of the new picture to be used
       let widthBot = Math.hypot(br.x-bl.x,br.y-bl.y);
       let widthTop = Math.hypot(tr.x-tl.x,tr.y-tl.y);
       let heightLeft = Math.hypot(tr.x-br.x,tr.y-br.y);
       let heightRight = Math.hypot(tl.x-bl.x,tl.y-bl.y);
-      let actWidth = (widthBot>widthTop) > widthBot:widthTop;
-      let actHeight = (heightLeft>heightRight) > heightLeft:heightRight;
+      let actWidth = (widthBot>widthTop) ? widthBot:widthTop;
+      let actHeight = (heightLeft>heightRight) ? heightLeft:heightRight;
       //Do perspective transform
       //Get the matrix of transformation
       let finalCoords = cv.matFromArray(4,1,cv.CV32FC2,[0,0,actWidth-1,0,actWidth-1,actHeight-1,0,actHeight-1]);
       let sourceCoords = cv.matFromArray(4,1,cv.CV32FC2,[tl.x,tl.y,tr.x,tr.y,br.x,br.y,bl.x,bl.y]);
-      let dsize = cv.Size(actWidth,actHeight);
+      dsize = cv.Size(actWidth,actHeight);
       let M = cv.getPerspectiveTransform(sourceCoords,finalCoords);
 
       //Show the images in their respective canvases
         cv.imshow('canvasInput', src);
         cv.imshow('outputHSV',hsv);
         cv.imshow('outputMask',mask);
-      // cv.imshow('outputBound',bound);
+        cv.imshow('outputBound',bound);
 
       //Delete all matrices after used
         org.delete();
@@ -140,7 +140,7 @@ imgElement.onload = function() {
     }
   catch(e)
     {
-      console.error(e)
+      console.error("gg get rekt: " + cv.exceptionFromPtr(e).msg);
     }
 };
 
