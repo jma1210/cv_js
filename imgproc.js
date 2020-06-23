@@ -42,15 +42,22 @@ imgElement.onload =
             let mean = new cv.Mat();
             let std = new cv.Mat();
             cv.meanStdDev(laplace,mean,std);
-
-            console.log(gray);
-            console.log(laplace);
-            console.log(mean);
-            console.log(std);
-
-            // gray.delete();
-            // laplace.delete();
-    
+            let varLaplace = Math.pow(std.doubleAt(0,0),2);
+            if(varLaplace>230)
+              {
+                console.log("Not blurry : "+varLaplace);
+              }
+            else
+              {
+                console.log("Blurry : "+varLaplace);
+                    org.delete();
+                    src.delete();
+                    gray.delete();
+                    laplace.delete();
+                    mean.delete();
+                    std.delete();
+                return;
+              }
             let hsv = new cv.Mat();
             let mask = new cv.Mat();
             let cropped = new cv.Mat();
@@ -96,6 +103,20 @@ imgElement.onload =
                 else
                   {
                     console.error("APPROPRIATE CONTOUR NOT FOUND")
+                        org.delete();
+                        src.delete();
+                        hsv.delete();
+                        gray.delete();
+                        laplace.delete();
+                        mean.delete();
+                        std.delete();
+                        mask.delete();
+                        cropped.delete();
+                        low.delete();
+                        high.delete();
+                        contours.delete();
+                        hierarchy.delete();
+                        approxCnt.delete();
                     return;
                   }
               }
@@ -113,12 +134,6 @@ imgElement.onload =
             let tr = sortedDiff[3];
             let bl = sortedDiff[0];
             
-    
-            // console.log("The corners are: ");
-            // console.log("("+tl.x+","+tl.y+")");
-            // console.log("("+tr.x+","+tr.y+")");
-            // console.log("("+bl.x+","+bl.y+")");
-            // console.log("("+br.x+","+br.y+")");
           //Calculate the width and height of the new picture to be used
           let widthBot = Math.hypot(br.x-bl.x,br.y-bl.y);
           let widthTop = Math.hypot(tr.x-tl.x,tr.y-tl.y);
@@ -127,12 +142,6 @@ imgElement.onload =
           let actWidth = (widthBot>widthTop) ? widthBot:widthTop;
           let actHeight = (heightLeft>heightRight) ? heightLeft:heightRight;
     
-          // console.log(widthBot);
-          // console.log(widthTop);
-          // console.log(heightLeft);
-          // console.log(heightRight);
-          // console.log(actWidth);
-          // console.log(actHeight);
           //Do perspective transform
           //Get the matrix of transformation
           let finalCoords = new cv.matFromArray(4,1,cv.CV_32FC2,[0,0,actWidth-1,0,actWidth-1,actHeight-1,0,actHeight-1]);
@@ -149,6 +158,11 @@ imgElement.onload =
           //Delete all matrices after used
             org.delete();
             src.delete();
+            gray.delete();
+            laplace.delete();
+            mean.delete();
+            std.delete();
+            hsv.delete();
             mask.delete();
             cropped.delete();
             low.delete();
@@ -159,7 +173,6 @@ imgElement.onload =
             finalCoords.delete();
             sourceCoords.delete();
             Matrix.delete();
-          // boxCnt.delete();
         }
       catch(e)
         {
