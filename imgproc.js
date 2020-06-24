@@ -34,6 +34,7 @@ imgElement.onload =
             let src = new cv.Mat();
           //perform resizing with src as destination matrix
             cv.resize(org,src,dsize,0,0,cv.INTER_AREA);
+            cv.imshow('canvasInput', src);
           //Try and detect the blurryness of an image
             let gray = new cv.Mat();
             cv.cvtColor(src,gray,cv.COLOR_RGB2GRAY,0);
@@ -49,7 +50,7 @@ imgElement.onload =
               }
             else
               {
-                console.log("Blurry : "+varLaplace);
+                window.alert("Blurry : "+varLaplace);
                     org.delete();
                     src.delete();
                     gray.delete();
@@ -67,7 +68,8 @@ imgElement.onload =
             let low = new cv.Mat(hsv.rows, hsv.cols, hsv.type(), [75,0,100,0]);
             let high = new cv.Mat(hsv.rows, hsv.cols, hsv.type(), [140,255,255,255]);
             cv.inRange(hsv,low,high,mask);
-    
+            cv.imshow('outputHSV',hsv);
+            cv.imshow('outputMask',mask);
           //Get matrix object for contours
             let contours = new cv.MatVector();
             let hierarchy = new cv.Mat();
@@ -102,7 +104,7 @@ imgElement.onload =
                   }
                 else
                   {
-                    console.error("APPROPRIATE CONTOUR NOT FOUND")
+                    alert("APPROPRIATE CONTOUR NOT FOUND")
                         org.delete();
                         src.delete();
                         hsv.delete();
@@ -148,11 +150,9 @@ imgElement.onload =
           let sourceCoords = new cv.matFromArray(4,1,cv.CV_32FC2,[tl.x,tl.y,tr.x,tr.y,br.x,br.y,bl.x,bl.y]);
           dsize = new cv.Size(actWidth,actHeight);
           let Matrix = cv.getPerspectiveTransform(sourceCoords,finalCoords);
-          cv.warpPerspective(src,cropped,Matrix,dsize,cv.INTER_LINEAR,cv.BORDER_CONSTANT,new cv.Scalar())
+          cv.warpPerspective(src,cropped,Matrix,dsize,cv.INTER_LINEAR,cv.BORDER_CONSTANT,new cv.Scalar());
           //Show the images in their respective canvases
-            cv.imshow('canvasInput', src);
-            cv.imshow('outputHSV',hsv);
-            cv.imshow('outputMask',mask);
+            
             cv.imshow('outputCropped',cropped);
     
           //Delete all matrices after used
