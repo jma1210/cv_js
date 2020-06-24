@@ -43,7 +43,7 @@ imgElement.onload =
             let std = new cv.Mat();
             cv.meanStdDev(laplace,mean,std);
             let varLaplace = Math.pow(std.doubleAt(0,0),2);
-            if(varLaplace>230)
+            if(varLaplace>200)
               {
                 console.log("Not blurry : "+varLaplace);
               }
@@ -64,7 +64,7 @@ imgElement.onload =
             cv.cvtColor(src,hsv,cv.COLOR_RGB2HSV,0)
         
           //Filter blue color of given ID image
-            let low = new cv.Mat(hsv.rows, hsv.cols, hsv.type(), [80,0,155,0]);
+            let low = new cv.Mat(hsv.rows, hsv.cols, hsv.type(), [75,0,100,0]);
             let high = new cv.Mat(hsv.rows, hsv.cols, hsv.type(), [140,255,255,255]);
             cv.inRange(hsv,low,high,mask);
     
